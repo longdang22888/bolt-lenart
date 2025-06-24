@@ -94,6 +94,22 @@ export default defineConfig((config) => {
     build: {
       target: 'esnext',
     },
+
+    // BẮT ĐẦU PHẦN CẤU HÌNH CHO RAILWAY
+    server: {
+      // Lắng nghe trên tất cả các địa chỉ IP, bắt buộc cho Railway
+      host: '0.0.0.0',
+      // Sử dụng cổng mà Railway cung cấp, nếu không có thì dùng cổng 3000
+      port: process.env.PORT ? parseInt(process.env.PORT, 10) : 3000,
+      // Cho phép kết nối từ tên miền công khai của Railway
+      allowedHosts: [process.env.RAILWAY_PUBLIC_DOMAIN],
+      // Cấu hình này giúp Hot Module Replacement (HMR) hoạt động đúng
+      hmr: {
+          clientPort: 443
+      }
+    },
+    // KẾT THÚC PHẦN CẤU HÌNH CHO RAILWAY
+
     plugins: [
       nodePolyfills({
         include: ['buffer', 'process', 'util', 'stream'],
@@ -114,7 +130,6 @@ export default defineConfig((config) => {
               map: null,
             };
           }
-
           return null;
         },
       },
@@ -164,11 +179,9 @@ function chrome129IssuePlugin() {
             res.end(
               '<body><h1>Please use Chrome Canary for testing.</h1><p>Chrome 129 has an issue with JavaScript modules & Vite local development, see <a href="https://github.com/stackblitz/bolt.new/issues/86#issuecomment-2395519258">for more information.</a></p><p><b>Note:</b> This only impacts <u>local development</u>. `pnpm run build` and `pnpm run start` will work fine in this browser.</p></body>',
             );
-
             return;
           }
         }
-
         next();
       });
     },
