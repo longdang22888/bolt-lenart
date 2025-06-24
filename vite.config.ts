@@ -97,13 +97,16 @@ export default defineConfig((config) => {
 
     // BẮT ĐẦU PHẦN CẤU HÌNH CHO RAILWAY
     server: {
-      // Lắng nghe trên tất cả các địa chỉ IP, bắt buộc cho Railway
       host: '0.0.0.0',
-      // Sử dụng cổng mà Railway cung cấp, nếu không có thì dùng cổng 3000
       port: process.env.PORT ? parseInt(process.env.PORT, 10) : 3000,
-      // Cho phép kết nối từ tên miền công khai của Railway
-      allowedHosts: [process.env.RAILWAY_PUBLIC_DOMAIN],
-      // Cấu hình này giúp Hot Module Replacement (HMR) hoạt động đúng
+      // === THAY ĐỔI Ở ĐÂY ===
+      // Thêm trực tiếp tên miền của bạn vào danh sách cho phép.
+      // Chúng ta vẫn giữ biến môi trường để phòng trường hợp khác.
+      allowedHosts: [
+        process.env.RAILWAY_PUBLIC_DOMAIN,
+        'boltdiy-production-b7cc.up.railway.app'
+      ],
+      // =======================
       hmr: {
           clientPort: 443
       }
